@@ -1,12 +1,6 @@
-//Task 5 – MongoDB $lookup pipelines
-
-//create collections
-
 db.collections("customers")
 db.collections("loans")
 db.collections("repayment")
-
-//insert records
 db.customers.insertMany([
   {_id:101, name:"Arun", city:"Chennai"},
   {_id:102, name:"Kiran", city:"Coimbatore"},
@@ -14,7 +8,6 @@ db.customers.insertMany([
   {_id:104, name:"Rahul", city:"Hyderabad"},
   {_id:105, name:"Divya", city:"Mumbai"}
 ])
-
 db.loans.insertMany([
   {_id:1001, customer_id:101, branch_id:1, amount:500000},
   {_id:1002, customer_id:102, branch_id:2, amount:800000},
@@ -22,7 +15,6 @@ db.loans.insertMany([
   {_id:1004, customer_id:101, branch_id:2, amount:400000},
   {_id:1005, customer_id:104, branch_id:4, amount:1000000}
 ])
-
 db.repayments.insertMany([
   {_id:1, loan_id:1001, amount:15000, date:ISODate("2026-11-10")},
   {_id:2, loan_id:1002, amount:20000, date:ISODate("2026-10-01")},
@@ -31,9 +23,6 @@ db.repayments.insertMany([
   {_id:5, loan_id:1005, amount:25000, date:ISODate("2026-11-12")}
 ])
 
-//pipelines
-
-//Loans with customer details
 db.loans.aggregate([
   {
     $lookup: {
@@ -45,7 +34,6 @@ db.loans.aggregate([
   }
 ])
 
-//Loans with repayment details
 db.loans.aggregate([
   {
     $lookup: {
@@ -56,8 +44,6 @@ db.loans.aggregate([
     }
   }
 ])
-
-//Latest repayment for each loan
 db.loans.aggregate([
   {
     $lookup: {
