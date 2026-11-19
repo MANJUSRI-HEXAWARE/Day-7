@@ -1,7 +1,6 @@
 --create database and table
 
 use LogisticsDB;
-
 CREATE TABLE Customers (
     customer_id INT PRIMARY KEY,
     customer_name VARCHAR(100) NOT NULL,
@@ -21,7 +20,6 @@ CREATE TABLE Employees (
     employee_id INT PRIMARY KEY,
     employee_name VARCHAR(100) NOT NULL,
     supervisor_id INT NULL,
-
     FOREIGN KEY (supervisor_id)
     REFERENCES Employees(employee_id)
 );
@@ -38,31 +36,27 @@ CREATE TABLE Shipments (
 
     FOREIGN KEY (customer_id)
         REFERENCES Customers(customer_id),
-
     FOREIGN KEY (carrier_id)
         REFERENCES Carriers(carrier_id),
-
     FOREIGN KEY (origin_hub_id)
         REFERENCES Hubs(hub_id),
-
     FOREIGN KEY (destination_hub_id)
         REFERENCES Hubs(hub_id),
-
     CHECK (shipping_cost >= 0),
     CHECK (destination_hub_id <> origin_hub_id)
 );
+
 CREATE TABLE DeliveryEvents (
     event_id INT PRIMARY KEY,
     shipment_id INT NOT NULL,
     event_type VARCHAR(50) NOT NULL,
     event_date DATETIME NOT NULL,
     description VARCHAR(255),
-
     FOREIGN KEY (shipment_id)
         REFERENCES Shipments(shipment_id)
 );
 
---insert into records
+--insert records
 
 INSERT INTO Customers VALUES
 (101, 'Arun', 'arun@gmail.com', 'Chennai'),
@@ -105,8 +99,6 @@ INSERT INTO DeliveryEvents VALUES
 (3, 1002, 'Delayed', '2026-11-05 12:00', 'Weather conditions'),
 (4, 1003, 'Delivered', '2026-11-09 17:00', 'Delivered late'),
 (5, 1005, 'Delivered', '2026-11-12 18:00', 'Delivered late');
-
---joins
 
 --Find shipments delayed by more than 2 days with carrier names
 SELECT s.shipment_id, c.carrier_name
@@ -231,7 +223,7 @@ WHERE carrier_id IN (
     )
 );
 
---Rewrite two subqueries as JOIN
+
 --Find customers who have shipments using INNER JOIN instead of IN
 SELECT DISTINCT c.customer_name
 FROM Customers c
@@ -243,7 +235,6 @@ FROM Customers c
 INNER JOIN Shipments s
 ON c.customer_id = s.customer_id;
 
---Nested Subquery
 --Find the second-highest shipping cost for each origin hub
 SELECT h.hub_name, MAX(s.shipping_cost) AS second_highest_cost
 FROM Shipments s
