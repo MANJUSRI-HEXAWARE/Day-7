@@ -1,7 +1,6 @@
 --create database and tables
 
 USE BankLoanDB;
-
 CREATE TABLE Customers (
     customer_id INT PRIMARY KEY,
     customer_name VARCHAR(100) NOT NULL,
@@ -21,10 +20,8 @@ CREATE TABLE Loans (
     branch_id INT NOT NULL,
     loan_amount DECIMAL(12,2) NOT NULL,
     loan_date DATE NOT NULL,
-
     FOREIGN KEY (customer_id) REFERENCES Customers(customer_id),
     FOREIGN KEY (branch_id) REFERENCES Branches(branch_id),
-
     CHECK (loan_amount > 0)
 );
 
@@ -35,7 +32,6 @@ CREATE TABLE Repayments (
     due_date DATE NOT NULL,
     repayment_date DATE NULL,
     amount DECIMAL(10,2) NOT NULL,
-
     FOREIGN KEY (loan_id) REFERENCES Loans(loan_id),
     CHECK (amount > 0),
     UNIQUE (loan_id, installment_no)
@@ -44,9 +40,7 @@ CREATE TABLE Repayments (
 CREATE TABLE LoanGuarantors (
     loan_id INT NOT NULL,
     guarantor_customer_id INT NOT NULL,
-
     PRIMARY KEY (loan_id, guarantor_customer_id),
-
     FOREIGN KEY (loan_id) REFERENCES Loans(loan_id),
     FOREIGN KEY (guarantor_customer_id) REFERENCES Customers(customer_id)
 );
