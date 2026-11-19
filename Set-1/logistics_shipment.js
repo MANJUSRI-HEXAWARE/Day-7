@@ -1,12 +1,7 @@
-//create collections
-
-
 db.createCollection("customers")
 db.createCollection("carriers")
 db.createCollection("shipments")
 db.createCollection("deliveryEvents")
-
-//insert records
 db.customers.insertMany([
     { customer_id: 101, customer_name: "Arun", city: "Chennai" },
     { customer_id: 102, customer_name: "Kiran", city: "Coimbatore" },
@@ -14,7 +9,6 @@ db.customers.insertMany([
     { customer_id: 104, customer_name: "Rahul", city: "Hyderabad" },
     { customer_id: 105, customer_name: "Divya", city: "Mumbai" }
 ])
-
 db.carriers.insertMany([
     { carrier_id: 201, carrier_name: "BlueDart" },
     { carrier_id: 202, carrier_name: "DTDC" },
@@ -22,7 +16,6 @@ db.carriers.insertMany([
     { carrier_id: 204, carrier_name: "FedEx" },
     { carrier_id: 205, carrier_name: "DHL" }
 ])
-
 db.shipments.insertMany([
     {
         shipment_id: 1001,
@@ -65,7 +58,6 @@ db.shipments.insertMany([
         actual_delivery_date: ISODate("2026-11-12")
     }
 ])
-
 db.deliveryEvents.insertMany([
     {
         event_id: 1,
@@ -98,10 +90,6 @@ db.deliveryEvents.insertMany([
         description: "Delivered late"
     }
 ])
-
-//MongoDB $lookup Pipeline
-
-//Find shipments along with their delivery events
 db.shipments.aggregate([
     {
         $lookup: {
@@ -112,8 +100,6 @@ db.shipments.aggregate([
         }
     }
 ])
-
-//Find customers along with their shipments
 db.customers.aggregate([
     {
         $lookup: {
@@ -124,8 +110,6 @@ db.customers.aggregate([
         }
     }
 ])
-
-//Find carriers with their shipment delay statistics
 db.carriers.aggregate([
     {
         $lookup: {
