@@ -83,7 +83,6 @@ INSERT INTO LoanGuarantors VALUES
 (1004, 105),
 (1005, 101);
 
---TEN Queries
 --Customers with loans in more than one branch
 SELECT c.customer_name
 FROM Customers c
@@ -91,7 +90,7 @@ JOIN Loans l ON c.customer_id = l.customer_id
 GROUP BY c.customer_id, c.customer_name
 HAVING COUNT(DISTINCT l.branch_id) > 1;
 
---Find guarantors who are also borrowers (SELF JOIN)
+--Find guarantors who are also borrowers 
 SELECT DISTINCT c.customer_name
 FROM LoanGuarantors g
 JOIN Loans l ON g.guarantor_customer_id = l.customer_id
@@ -105,7 +104,7 @@ AND repayment_date IS NULL
 GROUP BY loan_id
 HAVING COUNT(*) > 3;
 
---Branches with no loans (LEFT JOIN)
+--Branches with no loans
 SELECT b.branch_name
 FROM Branches b
 LEFT JOIN Loans l ON b.branch_id = l.branch_id
@@ -135,7 +134,7 @@ FROM Repayments
 WHERE repayment_date IS NOT NULL
 GROUP BY loan_id;
 
---Count loans in each branch, including branches with zero loans
+--Count loans in each branch, including branches with 0 loans
 SELECT b.branch_name, COUNT(l.loan_id) AS loan_count
 FROM Branches b
 LEFT JOIN Loans l ON b.branch_id = l.branch_id
@@ -147,9 +146,7 @@ SELECT l.loan_id, r.installment_no, r.amount,
 FROM Loans l
 LEFT JOIN Repayments r ON l.loan_id = r.loan_id;
 
---Task 2: Correlated and uncorrelated subqueries
---Find customers whose total loan exposure exceeds their branch average.
---Uncorrelated subquery
+--Uncorrelated subquery(customers whose total loan exposure exceeds their branch average).
 SELECT customer_id, SUM(loan_amount) AS total_exposure
 FROM Loans
 GROUP BY customer_id
@@ -169,8 +166,8 @@ HAVING SUM(l.loan_amount) >
     WHERE l2.branch_id = l.branch_id
 );
 
---Task 3 – EXISTS and NOT EXISTS
---Find customers who have at least one loan but no repayment in the last 60 day
+
+--customers who have at least one loan but no repayment in the last 60 day
 SELECT c.customer_name
 FROM Customers c
 WHERE EXISTS (
@@ -186,8 +183,8 @@ AND NOT EXISTS (
       AND r.repayment_date <= GETDATE()
 );
 
---Task 4: Nested subquery
---Find branches whose highest loan is greater than the bank-wide average of branch maximums
+
+--branches whose highest loan is greater than the bank-wide average of branch maximums
 SELECT b.branch_name, MAX(l.loan_amount) AS highest_loan
 FROM Branches b
 JOIN Loans l ON b.branch_id = l.branch_id
