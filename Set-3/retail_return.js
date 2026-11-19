@@ -1,8 +1,4 @@
-//create database and collection
-
 db.collections("returns_feedback")
-
-//insert records
 db.returns_feedback.insertMany([
   {return_id:1, rating:5, feedback:"Good service"},
   {return_id:2, rating:3, feedback:"Average service"},
@@ -12,9 +8,6 @@ db.returns_feedback.insertMany([
   {return_id:6, rating:4, feedback:"Good"},
   {return_id:7, rating:3, feedback:"Average"}
 ])
-
-//Task - 5 MongoDB Aggregation Pipelines using $lookup
-//Query 1 – Join Returns with Feedback
 
 db.returns.aggregate([
   {
@@ -27,7 +20,6 @@ db.returns.aggregate([
   }
 ])
 
-//Query 2 – Find products with their return feedback
 db.returns.aggregate([
   {
     $lookup:{
@@ -47,7 +39,6 @@ db.returns.aggregate([
   }
 ])
 
-//Query 3 – Find returns with feedback rating below 4
 db.returns.aggregate([
   {
     $lookup:{
