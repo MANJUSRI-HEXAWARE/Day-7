@@ -1,8 +1,4 @@
---Create database and tables
-
 USE RetailReturns;
-
-
 CREATE TABLE Customers (
     customer_id INT PRIMARY KEY,
     customer_name VARCHAR(50)
@@ -50,17 +46,20 @@ CREATE TABLE Refunds (
 INSERT INTO Customers VALUES
 (1,'Arun'),(2,'Bala'),(3,'Kiran'),
 (4,'Deepak'),(5,'Ravi'),(6,'Manoj');
+
 INSERT INTO Products VALUES
 (101,'Laptop','Electronics'),
 (102,'Mobile','Electronics'),
 (103,'Shoes','Fashion'),
 (104,'Watch','Accessories'),
 (105,'Headphones','Electronics');
+
 INSERT INTO Stores VALUES
 (1,'Chennai Store','South'),
 (2,'Coimbatore Store','South'),
 (3,'Bangalore Store','South'),
 (4,'Mumbai Store','West');
+
 INSERT INTO Employees VALUES
 (1,'Raj',NULL,1),
 (2,'Kumar',1,1),
@@ -68,6 +67,7 @@ INSERT INTO Employees VALUES
 (4,'Vijay',NULL,3),
 (5,'Ajay',4,3),
 (6,'Mani',NULL,4);
+
 INSERT INTO Returns VALUES
 (1,1001,1,101,1,2,'2026-01-05'),
 (2,1002,2,101,1,2,'2026-01-06'),
@@ -79,6 +79,7 @@ INSERT INTO Returns VALUES
 (8,1008,3,101,2,3,'2026-01-12'),
 (9,1009,6,102,4,6,'2026-01-13'),
 (10,1010,4,105,4,6,'2026-01-14');
+
 INSERT INTO Refunds VALUES
 (1,1,50000,'2026-01-06'),
 (2,2,50000,'2026-01-07'),
@@ -88,7 +89,6 @@ INSERT INTO Refunds VALUES
 (6,7,2000,'2026-01-12'),
 (7,9,15000,'2026-01-14');
 
---Task - 1 : Ten advanced queries
 --Products with return rate above 10%
 SELECT p.product_name,
        COUNT(r.return_id) * 100.0 / 50 AS return_rate
@@ -115,7 +115,7 @@ JOIN Refunds f ON r.return_id = f.return_id
 GROUP BY s.store_name
 ORDER BY total_refund DESC;
 
---Display employees and their managers
+--employees and their managers
 SELECT e.employee_name AS employee,
        m.employee_name AS manager
 FROM Employees e
@@ -128,7 +128,7 @@ JOIN Returns r ON c.customer_id = r.customer_id
 GROUP BY c.customer_name
 HAVING COUNT(r.return_id) > 1;
 
---Find products that have never been returned
+--products that have never been returned
 SELECT product_name
 FROM Products
 WHERE product_id NOT IN (
@@ -136,7 +136,7 @@ WHERE product_id NOT IN (
     WHERE product_id IS NOT NULL
 );
 
---Find products that have never been returned
+--products that have never been returned
 SELECT product_name
 FROM Products
 WHERE product_id NOT IN (
@@ -144,7 +144,7 @@ WHERE product_id NOT IN (
     WHERE product_id IS NOT NULL
 );
 
---Find stores whose refund value is above the average store refund value
+--stores whose refund value is above the average store refund value
 SELECT s.store_name, SUM(f.refund_amount) AS total_refund
 FROM Stores s
 JOIN Returns r ON s.store_id = r.store_id
@@ -160,7 +160,7 @@ HAVING SUM(f.refund_amount) > (
     ) x
 );
 
---Find products with refund amounts greater than the average refund amount
+--products with refund amounts greater than the average refund amount
 SELECT p.product_name, SUM(f.refund_amount) AS total_refund
 FROM Products p
 JOIN Returns r ON p.product_id = r.product_id
@@ -170,7 +170,7 @@ HAVING SUM(f.refund_amount) > (
     SELECT AVG(refund_amount) FROM Refunds
 );
 
---Task 2 – IN, NOT IN, NULL pitfall and NOT EXISTS
+--IN, NOT IN, NULL pitfall and NOT EXISTS
 SELECT * FROM Customers
 WHERE customer_id IN (
     SELECT customer_id FROM Returns
@@ -188,7 +188,7 @@ WHERE NOT EXISTS (
     WHERE r.customer_id = c.customer_id
 );
 
---Task 3 – ANY and ALL operators
+-- ANY and ALL operators
 SELECT s.store_name, SUM(f.refund_amount) AS total_refund
 FROM Stores s
 JOIN Returns r ON s.store_id = r.store_id
@@ -219,8 +219,8 @@ HAVING SUM(f.refund_amount) > ALL (
     GROUP BY s2.store_id
 );
 
---Task 4 – Two nested subqueries with execution results
---Find customers whose total refund is greater than the average customer refund.
+--Two nested subqueries with execution results
+--customers whose total refund is greater than the average customer refund.
 SELECT customer_name
 FROM Customers
 WHERE customer_id IN (
@@ -239,7 +239,7 @@ WHERE customer_id IN (
     )
 );
 
---Find products whose return count is greater than the average product return count
+--products whose return count is greater than the average product return count
 SELECT product_name
 FROM Products
 WHERE product_id IN (
